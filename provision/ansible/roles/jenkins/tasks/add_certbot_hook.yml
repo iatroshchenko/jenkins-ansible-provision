@@ -1,3 +1,5 @@
+- name: Touch cli ini
+  shell: touch /etc/letsencrypt/cli.ini
 - name: Add Certbot hook
   lineinfile:
     path: /etc/letsencrypt/cli.ini

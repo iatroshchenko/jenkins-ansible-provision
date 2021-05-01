@@ -1,3 +1,4 @@
 .idea
 provision/ansible/hosts
 provision/ansible/provision.yml
+.env

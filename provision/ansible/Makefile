@@ -10,5 +10,5 @@ authorize:
 upgrade:
 	ansible-playbook -i hosts upgrade.yml
 
-show-initial-password:
+password-remote:
 	ansible -i hosts prod -m shell -a 'cd /home/deploy/jenkins && docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword'

@@ -10,7 +10,7 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/html:/var/www/html:ro
-      - ./docker/development/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/production/nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - jenkins
 
