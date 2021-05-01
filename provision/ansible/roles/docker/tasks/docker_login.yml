@@ -1,0 +1,2 @@
+- name: "Log in to private docker registry"
+  shell: "docker login -u {{ username }} -p {{ password }} {{ registry }}"

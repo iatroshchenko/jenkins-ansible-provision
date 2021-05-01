@@ -1,0 +1,26 @@
+- name: "Provision"
+  hosts: prod
+  vars_prompt:
+    - name: registry
+      prompt: "Registry"
+      private: no
+    - name: username
+      prompt: "username"
+      private: no
+    - name: password
+      prompt: "password"
+  roles:
+    - docker
+    - certbot
+    - role: general
+      vars:
+        certbot_email: mymail@m.com
+        certbot_hosts:
+          - myhost.com
+          - myhost.com
+    - role: jenkins
+      vars:
+        certbot_email: mymail@mail.com
+        certbot_hosts:
+          - myhost.com
+          - myhost.com

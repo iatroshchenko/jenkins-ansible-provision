@@ -1,0 +1,38 @@
+## Install docker and docker-compose
+- name: "Download get-docker.sh"
+  shell: curl -fsSL https://get.docker.com -o get-docker.sh
+  args:
+    chdir: ~
+    creates: ~/get-docker.sh
+- name: "Check if docker is installed"
+  shell: docker ps
+  register: docker_exists
+  ignore_errors: yes
+- debug:
+    msg: docker ps rc is {{ docker_exists.rc }} (if docker_exists.rc == 0 - docker is installed)
+- name: "sh get-docker.sh"
+  shell: sh get-docker.sh
+  args:
+    chdir: ~
+  when: docker_exists.rc
+- name: "Install docker-compose"
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.27.0/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+    dest: /usr/local/bin/docker-compose
+    group: docker
+    mode: 'u+x,g+x'
+- name: "Set periodic docker prune"
+  cron:
+    name: docker-prune
+    job: 'docker system prune -f --filter "until=$((30*24))h"'
+    minute: '0'
+    hour: '1'
+- name: "Remove useless packages"
+  apt:
+    autoclean: yes
+- name: "Remove useless dependencies"
+  apt:
+    autoremove: yes
+- name: "Update apt packages"
+  apt:
+    update_cache: yes

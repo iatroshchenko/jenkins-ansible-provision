@@ -1,0 +1,4 @@
+- name: "Renew Certificates"
+  tasks:
+    - name: "Renew Certificates"
+      shell: "certbot renew"

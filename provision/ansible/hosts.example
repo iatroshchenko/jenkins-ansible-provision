@@ -1,0 +1,2 @@
+[prod]
+jenkins.myhost.dev ansible_user=root

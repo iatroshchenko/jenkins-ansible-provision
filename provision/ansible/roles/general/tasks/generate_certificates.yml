@@ -1,0 +1,38 @@
+- name: "Check if certificate already exists"
+  stat:
+    path: /etc/letsencrypt/live/{{ item }}/cert.pem
+  register: letsencrypt_certs
+  with_items: "{{ certbot_hosts }}"
+
+- name: "Check if server is running on 80"
+  wait_for:
+    port: 80
+    timeout: 1
+  register: port_80_check
+  ignore_errors: yes
+
+- name: "Create directory for nginx config"
+  shell: "mkdir ~/nginx"
+  args:
+    creates: "~/nginx"
+
+- name: "Copy config for certbot standalone nginx"
+  copy:
+    src: ../configs/default.conf
+    dest: ~/nginx/default.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: port_80_check.failed == true
+
+- name: "Up certbot standalone nginx"
+  shell: "docker run -d --name nginx-certbot -v /var/www/html:/var/www/html -v ~/nginx:/etc/nginx/conf.d -p 80:80 nginx:1.17 || true"
+  when: port_80_check.failed == true
+
+- name: "Generate certificate"
+  shell: "certbot certonly --webroot -w /var/www/html -d {{ item.item }} -n -m {{ certbot_email }} --agree-tos"
+  with_items: "{{ letsencrypt_certs.results }}"
+  when: not item.stat.exists
+
+- name: "Remove certbot standalone nginx"
+  shell: "docker container rm -f nginx-certbot || true"

@@ -1,0 +1,11 @@
+# Install certbot
+- name: "Install certbot"
+  snap:
+    name: certbot
+    classic: yes
+- name: "Remove useless dependencies"
+  apt:
+    autoremove: yes
+- name: "Update apt packages"
+  apt:
+    update_cache: yes
