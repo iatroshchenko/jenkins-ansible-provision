@@ -1,5 +1,5 @@
 - name: "Provision"
-  hosts: prod
+  hosts: manager
   vars_prompt:
     - name: registry
       prompt: "Registry"
@@ -24,3 +24,26 @@
         certbot_hosts:
           - myhost.com
           - myhost.com
+
+- name: Set Up Agents
+  hosts: agents
+  remote_user: root
+  vars_prompt:
+    - name: registry
+      prompt: "Registry"
+      private: no
+    - name: username
+      prompt: "username"
+      private: no
+    - name: password
+      prompt: "password"
+  roles:
+    - docker
+    - role: general
+      vars:
+        certbot_email: mymail@m.com
+        certbot_hosts:
+          - myhost.com
+          - myhost.com
+    - java
+    - agent

@@ -1,0 +1,7 @@
+- name: Create agent user
+  user:
+    name: jenkins
+    password: '!'
+    groups:
+      - docker
+    state: present

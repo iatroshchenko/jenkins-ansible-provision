@@ -1,2 +1,5 @@
-[prod]
-jenkins.myhost.dev ansible_user=root
+[manager]
+my.manager-node.dev ansible_user=root
+
+[agents]
+my.worker-node.dev ansible_user=root
